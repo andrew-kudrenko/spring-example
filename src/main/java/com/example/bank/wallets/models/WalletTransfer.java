@@ -1,20 +1,43 @@
 package com.example.bank.wallets.models;
 
+import com.example.bank.currencies.models.Currency;
+import jakarta.persistence.*;
+
+import java.util.Date;
+
+@Entity
+@Table(name="wallet_transfers")
 public class WalletTransfer {
-    private final Wallet sender;
-    private final Wallet consumer;
-    private final double quantity;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    private int id;
 
-    public WalletTransfer(Wallet sender, Wallet consumer, double quantity) throws Exception {
-        this.sender = sender;
-        this.consumer = consumer;
+    @Column
+    private double quantity;
 
-        if (quantity <= 0) {
-            throw new Exception("[Wallet Transfer] quantity cannot be lower than zero");
-        }
+    @Column
+    private int status;
 
-        this.quantity = quantity;
-    }
+    @Column
+    private Date createdAt;
+
+    @Column
+    private String comment;
+
+    @Column
+    private String errorMessage;
+
+    @ManyToOne
+    @JoinColumn(name="sender_uuid", referencedColumnName = "uuid")
+    private Wallet sender;
+
+    @ManyToOne
+    @JoinColumn(name="consumer_uuid", referencedColumnName = "uuid")
+    private Wallet consumer;
+
+    @ManyToOne
+    @JoinColumn(name="currency_id", referencedColumnName = "id")
+    private Currency currency;
 
     public Wallet getConsumer() {
         return consumer;
@@ -26,5 +49,45 @@ public class WalletTransfer {
 
     public double getQuantity() {
         return quantity;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public void setSender(Wallet sender) {
+        this.sender = sender;
+    }
+
+    public void setConsumer(Wallet consumer) {
+        this.consumer = consumer;
+    }
+
+    public Currency getCurrency() {
+        return currency;
     }
 }

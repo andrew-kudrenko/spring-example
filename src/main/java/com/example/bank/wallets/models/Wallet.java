@@ -2,31 +2,36 @@ package com.example.bank.wallets.models;
 
 import com.example.bank.currencies.models.Currency;
 import com.example.bank.users.models.User;
+import jakarta.persistence.*;
 
+import java.util.Date;
+
+@Entity
+@Table(name="wallets")
 public class Wallet {
-    private final User owner;
-    private final Currency currency;
+    @Id
+    @GeneratedValue
+    private int id;
 
-    private final int id;
+    @OneToOne
+    @JoinColumn(name="owner_id", referencedColumnName = "id")
+    private User owner;
+
+    @OneToOne
+    @JoinColumn(name="currency_id", referencedColumnName = "id")
+    private Currency currency;
+
+    @Column
+    private String title;
+
+    @Column
     private double balance;
 
-    public Wallet(int id, User owner, Currency currency) {
-        this.id = id;
-        this.owner = owner;
-        this.currency = currency;
-    }
+    @Column
+    private String uuid;
 
-    public boolean equals(Wallet wallet) {
-        return wallet != null && wallet.getId() == this.getId();
-    }
-
-    public User getOwner() {
-        return owner;
-    }
-
-    public double getBalance() {
-        return balance;
-    }
+    @Column
+    private Date createdAt;
 
     public void setBalance(double balance) {
         this.balance = balance;
@@ -36,11 +41,32 @@ public class Wallet {
         this.balance += balance;
     }
 
+
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
     public Currency getCurrency() {
         return currency;
     }
 
-    public int getId() {
-        return id;
+    public User getOwner() {
+        return owner;
     }
 }

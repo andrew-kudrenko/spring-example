@@ -1,43 +1,27 @@
 package com.example.bank.currencies.services;
 
-import com.example.bank.currencies.dto.CreateCurrencyDto;
 import com.example.bank.currencies.models.Currency;
+import com.example.bank.currencies.models.CurrencyCourse;
+import com.example.bank.currencies.repositories.CurrencyCourseRepository;
+import com.example.bank.currencies.repositories.CurrencyRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class CurrencyService {
-//    @Autowired
-//    private CurrencyRepository currencyRepository;
+    @Autowired
+    private CurrencyRepository currencyRepository;
+
+    @Autowired
+    private CurrencyCourseRepository currencyCourseRepository;
 
     public List<Currency> getAllCurrencies() {
-        var currencies = new ArrayList<Currency>();
-
-        for (var i = 0; i < 9; i++) {
-            var currency = new Currency();
-
-            currency.setId(i + 1);
-            currency.setTitle("Currency #" + i);
-            currency.setNumericCode(i + 100);
-            currency.setLetterCode("C" + currency.getNumericCode());
-
-            currencies.add(currency);
-        }
-
-        return currencies;
+        return currencyRepository.findAll();
     }
 
-    public Currency create(CreateCurrencyDto source) {
-        var currency = new Currency();
-
-        currency.setTitle(source.title());
-        currency.setNumericCode(source.numericCode());
-        currency.setLetterCode(source.letterCode());
-
-//        currencyRepository.save(currency);
-
-        return currency;
+    public List<CurrencyCourse> getCurrencyCourses(int currencyId) {
+        return currencyCourseRepository.findByCurrencyId(currencyId);
     }
 }

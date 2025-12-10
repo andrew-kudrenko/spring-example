@@ -1,7 +1,7 @@
-package com.example.bank.persistence;
+package com.example.bank.configuration;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
@@ -10,8 +10,8 @@ public class DataSourceConfig {
     public DriverManagerDataSource getDataSource() {
         final var dataSource = new DriverManagerDataSource();
 
-        dataSource.setDriverClassName("org.sqlite.JDBC");
-        dataSource.setUrl("jdbc:sqlite:bank:bank?cache=shared");
+        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://@localhost:3307/bank");
         dataSource.setUsername("root");
         dataSource.setPassword("root");
 

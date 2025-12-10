@@ -1,26 +1,52 @@
 package com.example.bank.users.models;
 
+import jakarta.persistence.*;
+
+import java.util.Date;
+
+@Entity
+@Table(name="users")
 public class User {
+    @Id
+    @GeneratedValue
     private int id;
-    private String name;
 
-    public boolean equals(User user) {
-        return user != null && user.getId() == this.getId();
-    }
+    @Column
+    private String email;
 
-    public String getName() {
-        return name;
-    }
+    @Column
+    private String firstName;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Column
+    private String middleName;
+
+    @Column
+    private String lastName;
+
+    @Column
+    private Date createdAt;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
     }
 }
