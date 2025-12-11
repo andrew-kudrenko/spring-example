@@ -1,10 +1,14 @@
 package com.example.bank.wallets.services;
 
 import com.example.bank.currencies.repositories.CurrencyRepository;
+import com.example.bank.users.models.UserStatus;
 import com.example.bank.wallets.models.Wallet;
 import com.example.bank.wallets.models.WalletTransfer;
 import com.example.bank.wallets.repositories.WalletTransfersRepository;
 import com.example.bank.wallets.repositories.WalletsRepository;
+import com.example.bank.wallets.services.transfers.PremiumUserCommissionStrategy;
+import com.example.bank.wallets.services.transfers.RegularUserCommissionStrategy;
+import com.example.bank.wallets.services.transfers.TransferCommissionStrategy;
 import jakarta.transaction.Transactional;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,16 +68,29 @@ public class WalletService {
             throw new BadRequestException("UUID счёта-отправителя и счёта-получателя должны отличаться.");
         }
 
-        if (sender.getBalance() < quantity) {
+        var commissionStrategy = (TransferCommissionStrategy) getCommissionStrategyClass(transfer).getConstructor().newInstance();
+        var sum = commissionStrategy.calculate(transfer);
+
+        if (sender.getBalance() < sum) {
             throw new BadRequestException("Недостаточно средств (" + quantity + ") на счету (" + transfer.getSender().getBalance() + ")");
         }
 
         consumer.updateBalance(quantity);
-        sender.updateBalance(-quantity);
+        sender.updateBalance(-sum);
 
         walletsRepository.save(sender);
         walletsRepository.save(consumer);
 
         return walletTransfersRepository.save(transfer);
+    }
+
+    private Class<?> getCommissionStrategyClass(WalletTransfer transfer) {
+        var senderStatus = transfer.getSender().getOwner().getStatus();
+
+        if (senderStatus.equals(UserStatus.Premium)) {
+            return PremiumUserCommissionStrategy.class;
+        }
+
+        return RegularUserCommissionStrategy.class;
     }
 }

@@ -24,6 +24,9 @@ public class User {
     private String lastName;
 
     @Column
+    private String status;
+
+    @Column
     private Date createdAt;
 
     public int getId() {
@@ -48,5 +51,9 @@ public class User {
 
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
