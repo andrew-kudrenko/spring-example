@@ -8,8 +8,8 @@ import java.util.Date;
 @Entity
 @Table(name="wallet_transfers")
 public class WalletTransfer {
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
+    @GeneratedValue
     private int id;
 
     @Column
@@ -89,5 +89,9 @@ public class WalletTransfer {
 
     public Currency getCurrency() {
         return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

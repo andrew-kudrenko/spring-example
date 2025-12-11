@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Currency {
     @Id
     @GeneratedValue
-    private int id;
+    private long id;
     @Column
     private String title;
 
@@ -17,7 +17,7 @@ public class Currency {
     @Column
     private int numericCode;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
